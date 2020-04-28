@@ -1,0 +1,13 @@
+---
+title: Demo
+---
+
+<ul>
+	{% for item in site.data.demos %}
+	<li>
+		<h2>
+			<a href="{{ item.link }}">{{ item.name }}</a>
+		</h2>
+	</li>
+	{% endfor %}
+</ul>
