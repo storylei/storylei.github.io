@@ -1,10 +1,6 @@
-- name: Home
+- name: 主页
   link: /
-- name: Demo
+- name: 项目
   link: /demo.html
-- name: Blog
-  link: /blog.html
-- name: Staff
-  link: /staff.html
-- name: About
-  link: /about.html
+# - name: 文章
+#  link: /blog.html
