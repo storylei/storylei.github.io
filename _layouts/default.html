@@ -35,12 +35,12 @@
           {%- endif -%}
         </ul>
 
-        {%- if site.plainwhite.navigation -%}
+        {%- if site.data.navigation -%}
           <nav class="navigation">
             <ul>
-              {% for link in site.data.navigation %}
+              {% for nav in site.data.navigation %}
                 <li>
-                  <a href="{{ link.link }}">{{ link.name }}</a>
+                  <a href="{{ nav.link }}">{{ nav.name }}</a>
                 </li>
               {% endfor %}
             </ul>
