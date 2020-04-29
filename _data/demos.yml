@@ -1,4 +1,6 @@
 - name: g2048
   link: /demos/g2048
+  img: /assets/imgs/demos/2048.png
 - name: Halloween
   link: /demos/Halloween/h.html
+  img: /assets/imgs/demos/halloween.png
