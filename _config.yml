@@ -50,7 +50,7 @@ plainwhite:
 
 # Build settings
 # theme: jekyll-theme-architect
-theme: plainwhite
+# theme: plainwhite
 
 plugins:
   - jekyll-seo-tag
