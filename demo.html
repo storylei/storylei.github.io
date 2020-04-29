@@ -1,13 +1,27 @@
 ---
+layout: default
 title: Demo
 ---
 
-<ul>
+<!-- {%- if site.data.demos > 0 -%} -->
+  <!-- <ul class="posts">
+    <li>
+      <h1 id="posts-label">Demo列表</h1>
+    </li>
+
+    {%- for demo in site.data.demos -%}
+      <li>{{ demo.name }}</li>
+    {%- endfor -%}
+  </ul> -->
+<!-- {%- endif -%} -->
+
+<ul class="demo-wrap">
 	{% for item in site.data.demos %}
-	<li>
-		<h2>
-			<a href="{{ item.link }}">{{ item.name }}</a>
-		</h2>
+	<li class="demo-item">
+		<div class="demo-img-wrap">
+			<img src="{{ item.img }}" alt="{{ item.name }}" />
+		</div>
+		<a class="link demo-link" href="{{ item.link }}" target="_blank">{{ item.name }}</a>
 	</li>
 	{% endfor %}
 </ul>
