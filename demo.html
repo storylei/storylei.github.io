@@ -14,14 +14,17 @@ title: Demo
     {%- endfor -%}
   </ul> -->
 <!-- {%- endif -%} -->
+<div class="posts demo-posts">
+	<h1 id="posts-label">项目列表</h1>
 
-<ul class="demo-wrap">
-	{% for item in site.data.demos %}
-	<li class="demo-item">
-		<div class="demo-img-wrap">
-			<img src="{{ item.img }}" alt="{{ item.name }}" />
-		</div>
-		<a class="link demo-link" href="{{ item.link }}" target="_blank">{{ item.name }}</a>
-	</li>
-	{% endfor %}
-</ul>
+	<ul class="demo-wrap">
+		{% for item in site.data.demos %}
+		<li class="demo-item">
+			<div class="demo-img-wrap">
+				<img src="{{ item.img }}" alt="{{ item.name }}" />
+			</div>
+			<a class="link demo-link" href="{{ item.link }}" target="_blank">{{ item.name }}</a>
+		</li>
+		{% endfor %}
+	</ul>
+</div>
