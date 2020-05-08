@@ -1,7 +1,8 @@
 ---
 layout: post
 title: "部分应用和复合"
-categories: 函数式编程
+categories: frontend
+tag: [JavaScript, 函数式编程]
 ---
 
 主要介绍第五章部分应用和复合的相关内容，以及高阶函数和柯里化。

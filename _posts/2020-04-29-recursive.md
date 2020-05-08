@@ -1,7 +1,8 @@
 ---
 layout: post
 title: "递归和迭代"
-categories: 函数式编程
+categories: frontend
+tag: [JavaScript, 函数式编程]
 ---
 
 递归指的是在一个函数的代码中直接或间接调用该函数自身

@@ -1,7 +1,8 @@
 ---
 layout: post
 title: "从面向对象到函数式编程"
-categories: 函数式编程
+categories: frontend
+tag: [JavaScript, 函数式编程]
 ---
 
 对比面向对象和函数编程

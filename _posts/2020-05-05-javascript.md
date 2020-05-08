@@ -1,7 +1,8 @@
 ---
 layout: post
 title: "JavaScript"
-categories: JavaScript
+categories: frontend
+tag: [JavaScript]
 ---
 
 ## JavaScript类型

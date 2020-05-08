@@ -1,7 +1,8 @@
 ---
 layout: post
 title: "JS函数执行机制"
-categories: JavaScript
+categories: frontend
+tag: [JavaScript]
 ---
 
 在JavaScript中，每个函数调用其实都会在函数上下文堆栈中创建记录（帧）

@@ -1,7 +1,8 @@
 ---
 layout: post
 title: "副作用和不变性"
-categories: 函数式编程
+categories: frontend
+tag: [JavaScript, 函数式编程]
 ---
 
 从函数的副作用降到纯函数，再到数据的不变性
