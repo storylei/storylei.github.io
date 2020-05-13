@@ -5,9 +5,16 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "chrome",
-            "name": "Launch test.html",
+            "type": "node",
             "request": "launch",
+            "name": "test.js",
+            "program": "${workspaceFolder}/demos/test/test.js"
+        },
+
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "test.html",
             "file": "${workspaceFolder}/demos/test/test.html"
         }
     ]
