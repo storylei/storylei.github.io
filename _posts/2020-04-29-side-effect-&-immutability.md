@@ -51,7 +51,7 @@ function Counter() {
 
 ```js
 var isObject = (val) =>  val && typeof val === 'object';
-var isArrary = (arr) => Array.isArrary(arr);
+var isArray = (arr) => Array.isArray(arr);
 function clone(obj) {
     if (!isObject(obj)){
         return obj;

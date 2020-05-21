@@ -17,7 +17,7 @@ tag: [JavaScript, 函数式编程]
 
 ### 基于类的
 
-任何一个对象都属于莫哥类，所有同类的对象都具有相同的字段和方法，成为该类的实例
+任何一个对象都属于某个类，所有同类的对象都具有相同的字段和方法，成为该类的实例
 
 ### 基于原型的
 
@@ -59,7 +59,7 @@ function inherits(obj, ...bases) {
             return chain.some(o => Reflect.has(o, prop));
         }
     }
-    return new Proxy(obj. handler);
+    return new Proxy(obj, handler);
 }
 ```
 
