@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "数据结构-数组和链表"
+title: "数据结构"
 categories: frontend
 tag: [数据结构]
 ---
@@ -85,12 +85,12 @@ console.log(`最长的字符${char}, 出现了${max}次`)
 ```js
 function parse(num) {
     num = parseFloat(num).toFixed(3);
-    let [integer, decimal] = String.prototype.split.call(num, '.');
-    integer = integer.replace(/\d+(?=(\d{3})+$)/g, '$&,');
-    return integer + '.' + (decimal ? decimal : '');
+    // let [integer, decimal] = String.prototype.split.call(num, '.');
+    num = num.replace(/(\d)(?=(\d{3})+\.)/g, ($0, $1) => { console.log($0, $1); return $1 + ','});
+    return num;
 }
 parse('1234.56');
-parse('123456.789');
+parse('123456890.789');
 ```
 
 判断是否是电话号码
@@ -130,7 +130,7 @@ const debounce = (fn, delay = 1000) {
     return (...args) => {
         clearTimeout(timer);
         timer = setTimeout(() => {
-            fn.appply(this, args);
+            fn.apply(this, args);
         }, delay);
     }
 }
@@ -265,3 +265,67 @@ function create(proto) {
     return new F();
 }
 ```
+
+<!-- 排序 -->
+
+```js
+
+var arr = [11, 4, 7, 9, 10, 2, 1];
+function bubbleSort(arr) {
+    for (let i = 0, len < arr.length; i < len - 2; i++) {
+        let a = arr[i], b = arr[i+1];
+        if (a > b) {
+            [a, b] = [b, a];
+        }
+    }
+    return arr;
+}
+
+console.log(bubbleSort(arr));
+
+```
+
+快速排序
+
+```js
+function quickSort(arr) {
+    if (arr.length <= 1) {
+        return arr;
+    }
+    let left = [], right = [], pivot = arr.shift();
+    for (let i = 0, len = arr.length; i < len; i++) {
+        arr[i] < pivot ? left.push(arr[i]) : right.push(arr[i]);
+    }
+
+    return quickSort(left).concat([pivot], quickSort(right));
+}
+
+var arr = [8, 11, 4, 7, 9, 10, 2, 1];
+
+// 原地快排，不占额外空间
+// 使用两个指针，分别在队首队尾
+function quickSort(arr, low = 0, high = arr.length - 1) {
+    if (low >= high) {
+        return arr;
+    }
+    let left = low, right = high;
+    let pivot = arr[left];
+
+    while (left < right) {
+        if (left < right && pivot <= arr[right]) {
+            right--;
+        }
+        arr[left] = arr[right];
+        if (left < right && pivot >= arr[right]) {
+            left++;
+        }
+        arr[right] = arr[left];
+    }
+    arr[left] = pivot;
+}
+
+console.log(quickSort(arr));
+
+```
+
+
