@@ -32,7 +32,7 @@ export default {
     },
     methods: {
         getDetailInfo () {
-            axios.get('/api/detail.json', {
+            axios.get('/demos/travel/dist/static/mock/detail.json', {
                 params: {
                     id: this.$route.params.id
                 }
