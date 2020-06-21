@@ -2,16 +2,23 @@
     <div class="header">
         <div class="header-left"><span class="iconfont">&#xe658;</span></div>
         <div class="header-input"><span class="iconfont">&#xe63c;</span>输入城市</div>
-        <div class="header-right">{{city}}<span class="iconfont">&#xe65c;</span></div>
+        <router-link to="/city">
+            <div class="header-right">{{this.city}}<span class="iconfont">&#xe65c;</span></div>
+        </router-link>
     </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 
 export default {
     name: 'HomeHeader',
-    props: {
-        city: String
+    computed: {
+        ...mapState(['city'])
+        // ...mapGetters(['dobuleCity'])
+    },
+    updated () {
+        console.log(this.doubleCity)
     }
 }
 </script>
@@ -20,13 +27,13 @@ export default {
 @import '~styles/variables.styl'
 .header
     display flex
-    line-height .86rem
+    line-height $headerHeight
     background $bgColor
     color #fff;
     .header-left
         width .64rem
-        height .86rem
-        line-height .86rem
+        height $headerHeight
+        line-height $headerHeight
         text-align center
         .iconfont
             font-size .5rem
@@ -41,10 +48,12 @@ export default {
         border-radius .1rem
         color #ccc
     .header-right
-        width 1.24rem
+        min-width 1.04rem
+        padding 0 .1rem
         text-align center
-        height .86rem
-        line-height .86rem
+        height $headerHeight
+        line-height $headerHeight
+        color: #fff
         .iconfont
             font-size .4rem
             vertical-align bottom
