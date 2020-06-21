@@ -58,7 +58,14 @@ module.exports = {
         assetsRoot: path.resolve(__dirname, '../dist'),
         assetsSubDirectory: 'static',
         assetsPublicPath: '/demos/travel/dist/',
-
+        proxyTable: {
+            '/api': {
+                target: 'https://storylei.github.io',
+                pathRewrite: {
+                    '^/api': '/demos/travel/dist/static/mock'
+                }
+            }
+        },
         /**
      * Source Maps
      */
