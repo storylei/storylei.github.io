@@ -4,3 +4,6 @@
 - name: Halloween
   link: /demos/Halloween/h.html
   img: /assets/imgs/demos/halloween.png
+- name: Travel
+  link: /demos/travel/dist/index.html
+  img: /assets/imgs/demos/travel.png
