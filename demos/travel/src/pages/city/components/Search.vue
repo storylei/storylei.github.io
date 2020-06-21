@@ -60,8 +60,6 @@ export default {
             }, 100)
         }
     },
-    components: {
-    },
     mounted () {
         this.scroll = new Bscroll(this.$refs.search)
     },

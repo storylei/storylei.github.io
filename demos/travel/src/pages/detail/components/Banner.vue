@@ -1,32 +1,38 @@
 <template>
 <div>
     <div class="banner" @click="handleBannerClick">
-        <img class="banner-img" src="" alt="">
+        <img class="banner-img" :src="imgUrl" alt="">
         <div class="banner-info">
-            <div class="banner-title">哈哈哈哈</div>
-            <div class="banner-number"><span class="iconfont banner-icon">&#xe64a;</span>39</div>
+            <div class="banner-title">{{name}}</div>
+            <div class="banner-number"><span class="iconfont banner-icon">&#xe64a;</span>{{this.galleryImgs.length}}</div>
         </div>
     </div>
-    <common-gallery :imgs="imgs" v-show="showGallery" @close="handleGalleryClose"></common-gallery>
+    <fade-animation>
+        <common-gallery :imgs="galleryImgs" v-show="showGallery" @close="handleGalleryClose"></common-gallery>
+    </fade-animation>
 </div>
 </template>
 
 <script>
 import CommonGallery from 'common/gallery/Gallery'
+import FadeAnimation from 'common/fade/Fade'
 
 // import axios from 'axios'
 export default {
     name: 'DetailBanner',
+    props: {
+        name: String,
+        imgUrl: String,
+        galleryImgs: Array
+    },
     data () {
         return {
-            showGallery: false,
-            imgs: []
+            showGallery: false
         }
     },
     components: {
-        CommonGallery
-    },
-    mounted () {
+        CommonGallery,
+        FadeAnimation
     },
     methods: {
         handleBannerClick () {
