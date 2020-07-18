@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Layout</title>
+    <style media="screen">
+        html * {
+            margin: 0;
+            padding: 0;
+        }
+        .layout.float {
+            overflow: visible;
+            height: 300px;
+        }
+        .layout.float .left {
+            float: left;
+        }
+        .layout.float .right {
+            float: right;
+            /* grid-template-columns: 100px; */
+            /* grid-column: 300px auto 300px; */
+        }
+    </style>
+</head>
+<body>
+    <section class="layout float">
+        <section class="left"></section>
+        <section class="center"></section>
+        <section class="right"></section>
+    </section>
+    
+</body>
+</html>

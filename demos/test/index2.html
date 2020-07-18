@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta http-equiv="x-dns-prefetch-control" content="on">
+    <link rel="dns-prefetch" href="//host_name_to_prefetch.com">
+    
+    <title>CSS盒模型</title>
+    <style>
+        html * {
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>BFC父子间边距重叠</h1>
+    <div id="sec">
+        <style>
+            #sec {
+                background-color: blue;
+                overflow: hidden;
+            }
+            #child {
+                height: 100px;
+                margin-top: 10px;
+                background-color: red;
+            }
+        </style>
+        <div id="child"></div>
+    </div>
+
+    <h1>BFC垂直方向边距重叠</h1>
+    <section id="margin">
+        <style>
+            #margin {
+                background-color: pink;
+                overflow: hidden;
+            }
+            #margin p {
+                margin: 5px auto 25px;
+                background: yellowgreen;
+                border: 1px solid #ccc;
+                overflow: hidden;
+            }
+        </style>
+        <p>1</p>
+        <div style="overflow: hidden;">
+            <p>2</p>
+        </div>
+        <p>3</p>
+    </section>
+
+    <h1>BFC清除浮动</h1>
+    <section id="layout">
+        <style>
+            #layout {
+                background-color: tomato;
+            }
+            #layout .left {
+                float: left;
+                width: 100px;
+                height: 100px;
+                background-color: wheat;
+            }
+            #layout .right {
+                height: 110px;
+                background-color: turquoise;
+                overflow: auto;
+            }
+        </style>
+        <div class="left"></div>
+        <div class="right"></div>
+    </section>
+
+    <h1>BFC子元素即使是float，也会参与高度计算</h1>
+    <section id="float">
+        <style>
+            #float {
+                background-color: violet;
+                overflow: auto;
+                /* float: left; */
+            }
+            #float .float {
+                float: left;
+            }
+        </style>
+        <div class="float">我是浮动元素</div>
+    </section>
+
+    <h1>测试事件</h1>
+    <style>
+        #ev {
+            width: 100px;
+            height: 50px;
+            text-align: center;
+            line-height: 50px;
+            background-color: aqua;
+        }
+    </style>
+    <div id="ev" >测试事件</div>
+</body>
+<script type="text/javascript">
+    var bindClick = function(msg) {
+        console.log(msg+' click');
+    }
+    var ev = document.getElementById('ev');
+    // window.addEventListener('click', bindClick.bind(this, 'window'), true);
+    // document.addEventListener('click', bindClick.bind(this,'document'), true);
+    // document.documentElement.addEventListener('click', bindClick.bind(this, 'html'), true);
+    // document.body.addEventListener('click', bindClick.bind(this, 'window'), true);
+    // ev.addEventListener('click', bindClick.bind(this, 'ev'), true);
+
+    // window.addEventListener('click', bindClick.bind(this, 'window'), false);
+    // document.addEventListener('click', bindClick.bind(this,'document'), false);
+    // document.documentElement.addEventListener('click', bindClick.bind(this, 'html'), false);
+    // document.body.addEventListener('click', bindClick.bind(this, 'body'), false);
+    // ev.addEventListener('click', bindClick.bind(this, 'ev'), false);
+
+    // var eve = new Event('test');
+    // ev.addEventListener('test', function() {
+    //     console.log('test dispatch');
+    // });
+    // setTimeout(function(){
+    //     ev.dispatchEvent(eve);
+    // }, 1000);
+</script>
+<script>
+    const util = {};
+    util.json = function(options) {
+        let opt = {
+            url: '',
+            type: 'get',
+            data: {},
+            success: function() {},
+            error: function() {}
+        };
+
+        // util.extend(opt, options);
+        opt = Object.assign(opt, options);
+
+        if (opt.url) {
+            let xhr = XMLHttpRequest ? new XMLHttpRequest() : new window.ActiveXObject('Microsoft.XMLHTTP');
+            let { data, url, type } = opt;
+            type = type.toUpperCase();
+            for (var k in data) {
+                dataArr.push(`${k}=${data[k]}`);
+            }
+            if (type === 'GET') {
+                url = url + '?' + dataArr.join('&');
+                xhr.open(type, url.replace(/\?$/g, ''), true);
+                xhr.send();
+            }
+            if (type === 'POST') {}
+            xhr.onload = function() {
+                if (xhr.status === 200 || xhr.status === 304) {
+
+                }
+            }
+            
+        }
+    }
+</script>
+
+<style>
+    .del {
+        padding: 10px;
+    }
+</style>
+
+<div>
+    <ul class="list">
+        <li>This is line<span class="del">x</span></li>
+        <li>This is line<span class="del">x</span></li>
+        <li>This is line<span class="del">x</span></li>
+        <li>This is line<span class="del">x</span></li>
+        <li>This is line<span class="del">x</span></li>
+        <li>This is line<span class="del">x</span></li>
+        <li>This is line<span class="del">x</span></li>
+        <li>This is line<span class="del">x</span></li>
+        <li>This is line<span class="del">x</span></li>
+        <li>This is line<span class="del">x</span></li>
+    </ul>
+</div>
+<script>
+class List {
+    constructor(sel) {
+       this.el = Array.from(document.querySelectorAll(sel));
+       let self = this;
+       this.el.forEach(item => {
+            item.addEventListener('click', function(e){
+                console.log(self);
+                if (e.target.className.indexOf('del') > -1) {
+                    self.removeItem.call(self, e.target);
+                }
+            })
+       })
+    }
+
+    removeItem(target) {
+       let self = this;
+       let root = self.findParent(target);
+       console.log('root:', root);
+       if (root) {
+           root.removeChild(target.parentNode);
+       }
+    }
+
+    findParent(node) {
+        let self = this;
+        let parent = node.parentNode;
+        let root;
+        while(!root || root != document.body) {
+            root = self.el.find(item => item === parent);
+            parent = parent.parentNode;
+        }
+        return root;
+    }
+}
+window.addEventListener('DOMContentLoaded', function() {
+    new List('.list');
+})
+</script>
+</html>
+

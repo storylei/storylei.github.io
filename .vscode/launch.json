@@ -10,7 +10,6 @@
             "name": "test.js",
             "program": "${workspaceFolder}/demos/test/test.js"
         },
-
         {
             "type": "chrome",
             "request": "launch",
