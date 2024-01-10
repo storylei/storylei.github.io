@@ -2,7 +2,7 @@
 layout: post
 title: "Spark Introduction"
 categories: bigdata
-tag: [spark, rdd]
+tag: 'spark'
 ---
 
 # RDD-based programming
@@ -31,7 +31,7 @@ JavaSparkContext sc = new JavaSparkContext(conf);
 // Build an RDD of Strings from the input textual file
 // The number of partitions is manually set to 5
 // Each element of the RDD is a line of the input file
-JavsRDD<String> lines = sc.textFile(inputFile, 5);
+JavaRDD<String> lines = sc.textFile(inputFile, 5);
 // The data is lazily read from the input file only when the data is needed (i.e., when an action is applied on the lines RDD, or on one of its “descendant” RDDs)
 ```
 
@@ -174,6 +174,76 @@ JavaRDD<String> randomSentencesRDD = inputRDD.sample(false,0.2);
 #### Set Transformations
 
 1. Union
+
+- **Duplicates elements** are not removed
+
+  `JavaRDD<T> union(JavaRDD<T> secondInputRDD)`
+
 2. Intersection
+
+- A **shuffle** operation is executed for computing the result of intersection
+
+  `JavaRDD<T> intersection(JavaRDD<T> secondInputRDD)`
+
 3. Subtract
+
+- Duplicates are not removed
+  A **shuffle** operation is executed for computing the result of **subtract**
+
+  `JavaRDD<T> subtract(JavaRDD<T> secondInputRDD)`
+
 4. Cartesian
+
+- A large amount of data is sent on the network
+- Elements from different input partitions must be combined to compute the returned pairs
+
+  `JavaPairRDD<T, R> cartesian(JavaRDD<R> secondInputRDD)`
+
+5. Examples
+
+```java
+    // Create two RDD of integers.
+		List<Integer> inputList1 = Arrays.asList(1, 2, 2, 3, 3);
+		JavaRDD<Integer> inputRDD1 = sc.parallelize(inputList1);
+		List<Integer> inputList2 = Arrays.asList(3, 4, 5);
+		JavaRDD<Integer> inputRDD2 = sc.parallelize(inputList2);
+
+		// Create three new RDDs by using union, intersection, and subtract
+		JavaRDD<Integer> outputUnionRDD = inputRDD1.union(inputRDD2);
+		JavaRDD<Integer> outputIntersectionRDD = inputRDD1.intersection(inputRDD2);
+		JavaRDD<Integer> outputSubtractRDD = inputRDD1.subtract(inputRDD2);
+
+		// Create an RDD of Integers and an RDD of Strings
+		List<Integer> inputList3 = Arrays.asList(1, 2, 3);
+		JavaRDD<Integer> inputRDD3 = sc.parallelize(inputList3);
+		List<String> inputList4 = Arrays.asList("A", "B");
+		JavaRDD<String> inputRDD4 = sc.parallelize(inputList4);
+		// Compute the cartesian product
+		JavaPairRDD<Integer,String> outputCartesianRDD = inputRDD3.cartesian(inputRDD4);
+
+    /**
+      (1,A)
+      (1,B)
+      (2,A)
+      (2,B)
+      (3,A)
+      (3,B)
+     */
+```
+
+#### Summary
+
+inputRDD1 = {1, 2, 3, 3}
+
+![图 1-1704919058644](../../images/2024-01-09-11_SparkRDD_Basic-f65f12d2e5d541a2b716f2d91100530b14dbc2649b35d6c9e6d29221b87f5957.png)
+
+![图 2-1704919089398](../../images/2024-01-09-11_SparkRDD_Basic-248058d9721e143afd321422ff8c8b57960a518e22dfc3c61d0c162e8b802b50.png)
+
+![图 3-1704919116970](../../images/2024-01-09-11_SparkRDD_Basic-2bb447ec1bb47e5645dbc674bcb7bb039c8723be5a79c077d121be3a612198bb.png)
+
+inputRDD1 = {1, 2, 2, 3, 3}
+inputRDD2 = {3, 4, 5}
+
+![图 4-1704919169835](../../images/2024-01-09-11_SparkRDD_Basic-7d3381dcac4ecf3dda81d12e66b05ae51f7fbdd00cfed650c47c92866825fc3a.png)
+
+![图 5-1704919192803](../../images/2024-01-09-11_SparkRDD_Basic-887b4d780c6d05ac943850416446f4b2157ab88f841b83b795bf395e3c48fc1a.png)
