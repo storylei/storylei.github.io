@@ -1,3 +1,10 @@
+---
+layout: post
+title: "Spark Introduction"
+categories: bigdata
+tag: [spark, rdd]
+---
+
 # RDD-based programming
 
 ## Spark context
