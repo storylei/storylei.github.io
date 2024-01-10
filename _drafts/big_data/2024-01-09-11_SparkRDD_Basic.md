@@ -82,3 +82,98 @@ List<String> contentOfLines = lines.collect();
 - Or write the result in the storage (output file/folder)
 
 #### Passing functions to Transformations and Actions
+
+![图 0-1704879371129](../../images/2024-01-09-11_SparkRDD_Basic-6f20de15b50e51ac07473ae65ee3cf898df15820f35813f047f9bfbfe3f0a06c.png)
+
+1. Solution based on named classes
+
+```java
+// Define a class implementing the Function interface
+class ContainsError implements Function<String, Boolean> {
+    // Implement the call method
+    public Boolean call(String x) {
+        return x.contains("error");
+    }
+}
+// Select the rows containing the word “error”
+JavaRDD<String> errorsRDD = inputRDD.filter(new ContainsError());
+```
+
+2. Solution based on anonymous classes
+
+```java
+// Select the rows containing the word “error”
+JavaRDD<String> errorsRDD = inputRDD.filter(
+    new Function<String, Boolean>() {
+        public Boolean call(String x) {
+            return x.contains("error");
+        }
+} );
+```
+
+3. Solution based on lambda functions
+
+```java
+// Select the rows containing the word “error”
+JavaRDD<String> errorsRDD = inputRDD.filter(x -> x.contains("error"));
+```
+
+### Basic Transformations
+
+#### Filter transformation
+
+```java
+List<Integer> inputList = Arrays.asList(1, 2, 3, 4);
+JavaRDD<Integer> inputRDD = sc.parallelize(inputList);
+JavaRDD<Integer> resRDD = inputRDD.filter(n -> n > 2);
+```
+
+#### Map transformation
+
+```java
+JavaRDD<String> inputRDD = sc.textFile('username.txt');
+JavaRDD<Integer> lenRDD = inputRDD.map(e -> new Integer(e.length));
+```
+
+#### FlatMap transformation
+
+- Duplicates are not removed
+- `public Iterable<R> call(T element)` mehtod of the `FlatMapFunction<T, R>` interface must be implemented
+
+```java
+JavaRDD<String> inputRDD = sc.textFile("document.txt");
+JavaRDD<String> listOfWordsRDD = inputRDD.flatMap(x -> Arrays.asList(x.split(" ")).iterator());
+```
+
+#### Distinct transformation
+
+- A shuffle operation is executed for computing the
+  result of the distinct transformation
+- The shuffle operation is used to repartition the input data
+
+```java
+JavaRDD<String> inputRDD = sc.textFile("names.txt");
+JavaRDD<String> distinctNamesRDD = inputRDD.distinct();
+```
+
+#### Sample transformation
+
+- withReplacement 参数用于指定是否允许重复抽样。
+  - 如果 withReplacement 为 true，则每个元素都有可能被抽中多次；
+  - 如果 withReplacement 为 false，则每个元素只能被抽中一次。
+- fraction 参数用于指定抽样比例。
+  - 如果 fraction 为 0，则表示不进行抽样，返回原始 RDD。
+  - 如果 fraction 为 1，则表示返回整个 RDD。
+  - 如果 fraction 介于 0 和 1 之间，则表示返回 RDD 的 fraction 比例的元素。
+
+```java
+JavaRDD<String> inputRDD = sc.textFile("sentences.txt");
+JavaRDD<String> randomSentencesRDD = inputRDD.sample(false,0.2);
+```
+
+#### Set Transformations
+
+1. Union
+2. Intersection
+3. Subtract
+4. Cartesian
