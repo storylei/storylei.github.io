@@ -247,3 +247,181 @@ inputRDD2 = {3, 4, 5}
 ![图 4-1704919169835](../../images/2024-01-09-11_SparkRDD_Basic-7d3381dcac4ecf3dda81d12e66b05ae51f7fbdd00cfed650c47c92866825fc3a.png)
 
 ![图 5-1704919192803](../../images/2024-01-09-11_SparkRDD_Basic-887b4d780c6d05ac943850416446f4b2157ab88f841b83b795bf395e3c48fc1a.png)
+
+### Basic Actions
+
+Spark actions can retrieve the content of an RDD or the result of a function applied on an RDD and
+
+- “Store” it in a local Java variable of the Driver program
+  - Pay attention to the size of the returned value
+  - Pay attentions that date are sent on the network from the nodes containing the content of RDDs and the executor running the Driver
+- Or store the content of an RDD in an output folder or database
+
+1. Are executed locally on each node containing partitions of the RDD on which the action is invoked
+   Local results are generated in each node
+2. Local results are sent on the network to the Driver that computes the final result and store it in local variables of the Driver
+
+#### Collect action
+
+The collect action returns a local Java list of objects containing the same objects of the considered RDD
+
+```java
+// Create an RDD of integers. Load the values 1, 2, 3, 3 in this RDD
+List<Integer> inputList = Arrays.asList(1, 2, 3, 3);
+JavaRDD<Integer> inputRDD = sc.parallelize(inputList);
+// Retrieve the elements of the inputRDD and store them in // a local Java list
+List<Integer> retrievedValues = inputRDD.collect();
+```
+
+#### Count action
+
+Count the number of elements of an RDD
+
+```java
+// Read the content of the two input textual files
+JavaRDD<String> inputRDD1 = sc.textFile("document1.txt");
+long numLinesDoc1 = inputRDD1.count();
+```
+
+#### CountByValue action
+
+The countByValue action returns a local Java Map object containing the information about the number of times each element occurs in the RDD
+
+```java
+  List<String> inputList = Arrays.asList("a", "b", "c", "b", "c", "c");
+		JavaRDD<String> inputRdd = sc.parallelize(inputList);
+		java.util.Map<String, java.lang.Long> namesOccurrences = inputRdd.countByValue();
+		System.out.println(namesOccurrences.toString());
+    // {a=1, b=2, c=3}
+```
+
+#### Take action
+
+The take(n) action returns a local Java list of objects containing the first n elements of the considered RDD
+
+```java
+    List<Integer> inputList = Arrays.asList(1, 5, 3, 3, 2);
+		JavaRDD<Integer> inputRDD = sc.parallelize(inputList);
+		List<Integer> retrievedValues = inputRDD.take(1);
+    // {1}
+```
+
+#### First action
+
+The first() action returns a local Java object containing the first element of the considered RDD
+
+```java
+    List<Integer> inputList = Arrays.asList(1, 5, 3, 3, 2);
+		JavaRDD<Integer> inputRDD = sc.parallelize(inputList);
+		List<Integer> retrievedValues = inputRDD.first();
+    // 1
+```
+
+#### Top action
+
+The top(n) action returns a local Java list of objects containing the top n (largest) elements of the considered RDD
+
+```java
+    List<Integer> inputList = Arrays.asList(1, 5, 3, 3, 2);
+		JavaRDD<Integer> inputRDD = sc.parallelize(inputList);
+		List<Integer> retrievedValues = inputRDD.top(3);
+    // [5, 3, 3]
+```
+
+#### TakeOrderd action
+
+The takeOrdered(n, comparator<T>) action returns a local Java list of objects containing the top n (smallest) elements of the considered RDD
+
+#### TakeSample action
+
+The takeSample(withReplacement, n, [seed]) action returns a local Java list of objects containing n random elements of the considered RDD
+
+```java
+    List<Integer> inputList = Arrays.asList(1, 5, 3, 3, 2);
+		JavaRDD<Integer> inputRDD = sc.parallelize(inputList);
+		List<Integer> retrievedValues = inputRDD.takeSample(false, 2);
+		System.out.println(retrievedValues);
+```
+
+#### Reduce action
+
+Return a single Java object obtained by combining the objects of the RDD by using a user provide “function”
+
+```java
+		List<Integer> inputList = Arrays.asList(1, 5, 3, 3, 2);
+		JavaRDD<Integer> inputRDD = sc.parallelize(inputList);
+		Integer sum = inputRDD.reduce((n1, n2) -> n1 + n2);
+		System.out.println(sum);
+    // 14
+    Integer maxNum = inputRDD.reduce((n1, n2) -> n1 > n2 ? n1 : n2);
+		System.out.println(maxNum);
+```
+
+#### Fold action
+
+Return a single Java object obtained by combining the objects of the RDD by using a user provide “function”
+
+Fold can be used to parallelize functions that are associative but non-commutative
+
+E.g., concatenation of a list of strings
+
+```java
+		List<String> inputList = Arrays.asList("a", "b", "c");
+		JavaRDD<String> inputRDD = sc.parallelize(inputList);
+		String s = inputRDD.fold("", (s1, s2) -> s1 + s2);
+		System.out.println(s);
+    // abc
+```
+
+#### Aggregate action
+
+![图 6-1705004303456](../../images/2024-01-09-11_SparkRDD_Basic-89f518c180f96cdaf4a2dd398c4326ed3faa7f94d6db112cabf0fc3d7eb4ca4b.png)
+
+```java
+class SumCount implements Serializable {
+	public int sum;
+	public int numElements;
+
+	public SumCount(int sum, int numElements) {
+		this.sum = sum;
+		this.numElements = numElements;
+	}
+
+	public double avg() {
+		return sum/(double)numElements;
+	}
+}
+
+// ......
+
+    List<Integer> inputListAggr = Arrays.asList(1, 2, 3, 3);
+		JavaRDD<Integer> inputRDDAggr = sc.parallelize(inputListAggr);
+
+		SumCount zeroValue = new SumCount(0, 0);
+		SumCount result = inputRDDAggr.aggregate(zeroValue,
+		(a, e) -> {
+			a.sum = a.sum + e;
+			a.numElements++;
+			return a;
+		}, (a1, a2) -> {
+			System.out.println("2: a2.sum = " + a2.sum +", a2.numElements = " + a2.numElements);
+			a1.sum = a1.sum + a2.sum;
+			a1.numElements = a1.numElements + a2.numElements;
+			return a1;
+		});
+
+		Double avgNum = result.avg();
+		System.out.println(avgNum);
+```
+
+#### Summary
+
+inputRDD1 = {1, 2, 3, 3}
+
+![图 7-1705004425888](../../images/2024-01-09-11_SparkRDD_Basic-26024e5e516d6df08b2d8af12bf331436147cd4f94b9772a6b15ee540b5772cb.png)
+
+![图 8-1705004448815](../../images/2024-01-09-11_SparkRDD_Basic-33e56a35f51e915ed91748096ae22849c447671cbebb30e1b3138842dcd0017c.png)
+
+![图 9-1705004493400](../../images/2024-01-09-11_SparkRDD_Basic-d322defe0bd1e934631514a6d756b380b5859baca252bca2d853cc4ccfe93d9c.png)
+
+![图 10-1705004513791](../../images/2024-01-09-11_SparkRDD_Basic-b5bace63a4b915f9c29a629960f352a941eafe923447f1b586fabaeb316571d5.png)
